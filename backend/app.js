@@ -19,6 +19,8 @@ dotenv.config();
 
 const app = express();
 
+app.set('trust proxy', 1); 
+
 app.use(cors({
   origin: ['http://localhost:5173', 'https://chrono.sameersharma.me'],
   credentials: true,
@@ -32,9 +34,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    sameSite: 'none', 
-    secure: true       
-  }
+    sameSite: 'none',    
+    secure: true,        
+    httpOnly: true,      
+  },
 }));
 
 app.use(passport.initialize());
@@ -51,6 +54,14 @@ app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is working');
+});
+
+app.get('/debug/session', (req, res) => {
+  res.json({
+    session: req.session,
+    user: req.user,
+    cookie: req.headers.cookie,
+  });
 });
 
 export default app;
