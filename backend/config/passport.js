@@ -12,7 +12,6 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
   scope: ['profile', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
-  console.log('🔍 Full Google profile:', JSON.stringify(profile, null, 2));
 
   try {
     const googleId = profile.id;
@@ -43,7 +42,7 @@ passport.use(new GoogleStrategy({
 
     return done(null, user);
   } catch (err) {
-    console.error('❌ Error during Google OAuth DB logic:', err);
+    console.error('fError during Google OAuth DB logic:', err);
     return done(err);
   }
 }));

@@ -2,12 +2,10 @@ import cron from 'node-cron';
 import pool from '../models/db.js';
 
 export function startReminderJob() {
-  console.log('🔁 Reminder job started');
+  console.log('Reminder job started');
 
   cron.schedule('* * * * *', async () => {
     const now = new Date();
-
-    // Format local time to 'YYYY-MM-DDTHH:MM'
     const pad = (n) => n.toString().padStart(2, '0');
     const year = now.getFullYear();
     const month = pad(now.getMonth() + 1);
@@ -24,7 +22,7 @@ export function startReminderJob() {
     );
 
     for (const task of result.rows) {
-      console.log(`🔔 Reminder: Task "${task.title}" is due now`);
+      console.log(`Reminder: Task "${task.title}" is due now`);
     }
   });
 }
