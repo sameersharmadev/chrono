@@ -19,7 +19,7 @@ router.get('/google/callback', passport.authenticate('google', {
   const user = req.user;
 
   if (!user || !user.email) {
-    console.error('❌ No email found in Google profile:', user);
+    console.error(' No email found in Google profile:', user);
     return res.status(500).send('Google account has no email associated.');
   }
 
