@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import passport from 'passport';
-import session from 'express-session';
 
 import userRoutes from './routes/userRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
@@ -13,13 +12,13 @@ import calendarRoutes from './routes/calendarRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 import reminderRoutes from './routes/reminderRoutes.js';
 import authRoutes from './routes/authRoutes.js';
-import './config/passport.js';
+import './config/passport.js'; 
 
 dotenv.config();
 
 const app = express();
 
-app.set('trust proxy', 1); 
+app.set('trust proxy', 1);
 
 app.use(cors({
   origin: ['http://localhost:5173', 'https://chrono.sameersharma.me'],
@@ -29,19 +28,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(session({
-  secret: process.env.JWT_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    sameSite: 'none',    
-    secure: true,        
-    httpOnly: true,      
-  },
-}));
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -54,14 +41,6 @@ app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is working');
-});
-
-app.get('/debug/session', (req, res) => {
-  res.json({
-    session: req.session,
-    user: req.user,
-    cookie: req.headers.cookie,
-  });
 });
 
 export default app;

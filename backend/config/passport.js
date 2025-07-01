@@ -1,3 +1,4 @@
+// config/passport.js
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import dotenv from 'dotenv';
@@ -12,40 +13,27 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
   scope: ['profile', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
-
   try {
-    const googleId = profile.id;
-    const email = profile.emails?.[0]?.value || null;
+    const email = profile.emails?.[0]?.value;
+    if (!email) return done(new Error('No email found'));
 
-    if (!email) return done(new Error('No email found in Google profile'));
+    const result = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    let user = result.rows[0];
 
-    const existingUser = await db.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
-    );
-
-    let user;
-
-    if (existingUser.rows.length > 0) {
-      user = existingUser.rows[0];
-    } else {
+    if (!user) {
       const newUserId = uuidv4();
-      const insertRes = await db.query(
+      const res = await db.query(
         `INSERT INTO users (id, email)
          VALUES ($1, $2)
          RETURNING *`,
         [newUserId, email]
       );
-
-      user = insertRes.rows[0];
+      user = res.rows[0];
     }
 
-    return done(null, user);
+    done(null, user);
   } catch (err) {
-    console.error('fError during Google OAuth DB logic:', err);
-    return done(err);
+    console.error('Google auth error:', err);
+    done(err);
   }
 }));
-
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
