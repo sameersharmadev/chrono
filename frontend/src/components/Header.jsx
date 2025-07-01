@@ -11,6 +11,7 @@ export default function Header({ title = 'Dashboard' }) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const notificationsRef = useRef(null);
+  const profileRef = useRef(null); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,6 +39,10 @@ export default function Header({ title = 'Dashboard' }) {
     const handleClickOutside = (e) => {
       if (notificationsRef.current && !notificationsRef.current.contains(e.target)) {
         setShowNotifications(false);
+      }
+
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setDropdownOpen(false);
       }
     };
 
@@ -76,7 +81,7 @@ export default function Header({ title = 'Dashboard' }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full flex items-center justify-between px-4 py-3  border-gray-300 dark:border-gray-700 bg-[#f9fafb] dark:bg-[#1a1a1a] backdrop-blur supports-[backdrop-filter]:bg-[#f9fafb]/60 dark:supports-[backdrop-filter]:bg-[#1a1a1a]/60">
+    <header className="sticky top-0 z-40 w-full flex items-center justify-between px-4 py-3 border-gray-300 dark:border-gray-700 bg-[#f9fafb] dark:bg-[#1a1a1a] backdrop-blur supports-[backdrop-filter]:bg-[#f9fafb]/60 dark:supports-[backdrop-filter]:bg-[#1a1a1a]/60">
       <h2 className="text-xl font-semibold tracking-wide text-gray-800 dark:text-white pl-12 md:pl-0">
         {title}
       </h2>
@@ -156,7 +161,7 @@ export default function Header({ title = 'Dashboard' }) {
         </div>
 
         {/* Profile */}
-        <div className="relative">
+        <div className="relative" ref={profileRef}>
           <div
             onClick={() => setDropdownOpen((prev) => !prev)}
             className="w-8 h-8 rounded-full bg-gray-400 dark:bg-gray-600 flex items-center justify-center text-sm font-bold text-white hover:opacity-80 select-none"

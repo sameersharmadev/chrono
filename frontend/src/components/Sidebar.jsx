@@ -1,4 +1,4 @@
-import {Home, Calendar, ListTodo, AlarmClock, BarChart3, Settings, Menu} from 'lucide-react';
+import { Home, Calendar, ListTodo, AlarmClock, BarChart3, Settings, Menu } from 'lucide-react';
 import { Link, useLocation } from 'react-router';
 import { useState } from 'react';
 
@@ -47,7 +47,11 @@ export default function Sidebar() {
       >
         {/* Branding + Nav */}
         <div>
-          <h1 className="text-2xl font-bold tracking-wide px-2 mb-8">Chrono</h1>
+          <div className="flex items-center gap-2 px-2 mb-8">
+            <img src="/chrono.svg" alt="Chrono Logo" className="w-8 h-8" />
+            <h1 className="text-2xl font-bold tracking-wide">Chrono</h1>
+          </div>
+
           <nav className="space-y-2">
             {navItems.map(({ icon, label, path }) => (
               <NavItem
