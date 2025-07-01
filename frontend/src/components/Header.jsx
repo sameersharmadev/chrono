@@ -11,7 +11,7 @@ export default function Header({ title = 'Dashboard' }) {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const notificationsRef = useRef(null);
-  const profileRef = useRef(null); 
+  const profileRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +27,9 @@ export default function Header({ title = 'Dashboard' }) {
       setUser(data?.user || null);
     });
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reminders/recent`)
-      .then((res) => res.json())
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reminders/recent`, {
+      credentials: 'include', 
+    })      .then((res) => res.json())
       .then((data) => {
         setReminders(data.reminders || []);
       })
@@ -62,6 +63,7 @@ export default function Header({ title = 'Dashboard' }) {
     try {
       await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/reminders/${id}/read`, {
         method: 'PATCH',
+        credentials: 'include',
       });
       setReminders((prev) => prev.map((r) => (r.id === id ? { ...r, is_read: true } : r)));
     } catch (err) {
@@ -122,11 +124,10 @@ export default function Header({ title = 'Dashboard' }) {
                     <li
                       key={r.id}
                       onClick={() => handleReminderClick(r.id)}
-                      className={`cursor-pointer px-3 py-2 rounded-md flex items-start gap-2 hover:bg-gray-100 dark:hover:bg-[#3a3a3a] ${
-                        !r.is_read
+                      className={`cursor-pointer px-3 py-2 rounded-md flex items-start gap-2 hover:bg-gray-100 dark:hover:bg-[#3a3a3a] ${!r.is_read
                           ? 'font-semibold text-black dark:text-white'
                           : 'text-gray-600 dark:text-gray-300'
-                      }`}
+                        }`}
                     >
                       <Bell size={16} className="shrink-0 mt-0.5" />
                       <span
@@ -135,9 +136,9 @@ export default function Header({ title = 'Dashboard' }) {
                           r.title +
                           (r.due_date
                             ? ` (Due ${new Date(r.due_date).toLocaleDateString(undefined, {
-                                month: 'short',
-                                day: 'numeric',
-                              })})`
+                              month: 'short',
+                              day: 'numeric',
+                            })})`
                             : '')
                         }
                       >

@@ -33,7 +33,7 @@ export default function DashboardPage() {
     useEffect(() => {
   const load = async () => {
     const userRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, { credentials: 'include' });
-    if (!userRes.ok) return setLoading(false); // not logged in
+    if (!userRes.ok) return setLoading(false); 
 
     const [summary, tasks, tags] = await Promise.all([
       fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats/weekly-summary`, { credentials: 'include' }).then(res => res.json()),
