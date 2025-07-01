@@ -8,6 +8,7 @@ import subtaskRoutes from './routes/subtaskRoutes.js';
 import tagRoutes from './routes/tagRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
+import reminderRoutes from './routes/reminderRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/subtasks', subtaskRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/calendar', calendarRoutes);
 app.use('/api/stats', statsRoutes); 
+app.use('/api/reminders', reminderRoutes); 
 
 app.get('/', (req, res) => {
   res.send('API is working');

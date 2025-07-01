@@ -1,15 +1,14 @@
 import pool from './db.js';
 
-export async function createTask({ userId, title, description, priority, due_date }) {
+export async function createTask({ userId, title, description, priority, due_date, reminder }) {
   const result = await pool.query(
-    `INSERT INTO tasks (user_id, title, description, priority, due_date)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO tasks (user_id, title, description, priority, due_date, reminder_time)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING *`,
-    [userId, title, description, priority, due_date]
+    [userId, title, description, priority, due_date, reminder]
   );
   return result.rows[0];
 }
-
 
 export async function getUserTasks(userId) {
   const result = await pool.query(
@@ -21,23 +20,36 @@ export async function getUserTasks(userId) {
 
   for (const task of tasks) {
     task.progress = await getTaskProgress(task.id);
+
+    const tagResult = await pool.query(
+      `SELECT tags.id, tags.name
+       FROM tags
+       INNER JOIN task_tags ON tags.id = task_tags.tag_id
+       WHERE task_tags.task_id = $1`,
+      [task.id]
+    );
+    task.tags = tagResult.rows;
+
+    task.reminder = task.reminder_time;
+    delete task.reminder_time;
   }
 
   return tasks;
 }
 
-
 export async function updateTask(taskId, userId, updates) {
   const fields = [];
   const values = [];
   let index = 1;
+
   for (const [key, value] of Object.entries(updates)) {
     if (value !== undefined) {
-      fields.push(`${key} = $${index}`);
+      fields.push(`${key === 'reminder' ? 'reminder_time' : key} = $${index}`);
       values.push(value);
       index++;
     }
   }
+
   fields.push(`updated_at = NOW()`);
   values.push(taskId);
   values.push(userId);
@@ -56,6 +68,7 @@ export async function updateTask(taskId, userId, updates) {
 export async function deleteTask(taskId, userId) {
   await pool.query(`DELETE FROM tasks WHERE id = $1 AND user_id = $2`, [taskId, userId]);
 }
+
 export async function getTaskProgress(taskId) {
   const result = await pool.query(
     `SELECT
@@ -70,16 +83,37 @@ export async function getTaskProgress(taskId) {
   return total === 0 ? 0 : Math.round((completed / total) * 100);
 }
 
+
 export async function getTasksBetweenDates(userId, start, end) {
   const { rows } = await pool.query(
     `SELECT * FROM tasks
      WHERE user_id = $1
-     AND due_date BETWEEN $2 AND $3
+     AND (due_date BETWEEN $2 AND $3 OR reminder_time BETWEEN $2 AND $3)
      ORDER BY due_date ASC`,
     [userId, start, end]
   );
+
+  for (const task of rows) {
+    task.progress = await getTaskProgress(task.id);
+
+    const tagResult = await pool.query(
+      `SELECT tags.id, tags.name
+       FROM tags
+       INNER JOIN task_tags ON tags.id = task_tags.tag_id
+       WHERE task_tags.task_id = $1`,
+      [task.id]
+    );
+    task.tags = tagResult.rows;
+
+    task.reminder = task.reminder_time;
+    delete task.reminder_time;
+  }
+
   return rows;
 }
+
+
+
 export async function fetchTaskStats(userId) {
   const { rows: all } = await pool.query(
     `SELECT 
@@ -115,3 +149,29 @@ export async function fetchTaskStats(userId) {
   };
 }
 
+export async function getTaskById(taskId, userId) {
+  const result = await pool.query(
+    `SELECT * FROM tasks WHERE id = $1 AND user_id = $2`,
+    [taskId, userId]
+  );
+
+  if (result.rows.length === 0) return null;
+
+  const task = result.rows[0];
+
+  task.progress = await getTaskProgress(task.id);
+
+  const tagResult = await pool.query(
+    `SELECT tags.id, tags.name
+     FROM tags
+     INNER JOIN task_tags ON tags.id = task_tags.tag_id
+     WHERE task_tags.task_id = $1`,
+    [task.id]
+  );
+  task.tags = tagResult.rows;
+
+  task.reminder = task.reminder_time;
+  delete task.reminder_time;
+
+  return task;
+}

@@ -12,7 +12,7 @@ export default function Sidebar() {
     { icon: <ListTodo size={18} />, label: 'Tasks', path: '/tasks' },
     { icon: <Calendar size={18} />, label: 'Calendar', path: '/calendar' },
     { icon: <AlarmClock size={18} />, label: 'Reminders', path: '/reminders' },
-    { icon: <BarChart3 size={18} />, label: 'Reports', path: '/reports' },
+    { icon: <BarChart3 size={18} />, label: 'Stats', path: '/reports' },
   ];
 
   return (

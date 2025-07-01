@@ -151,7 +151,7 @@ DELETE http://localhost:5000/api/tags/task/{{task_id}}/{{tag_id}}
 GET http://localhost:5000/api/tasks?tag={{tag_id}}
 
 ### 📅 Get Tasks by Date Range
-GET http://localhost:5000/api/calendar?start=2025-06-25&end=2025-07-01
+GET http://localhost:5000/api/calendar?start=2025-06-25&end=2025-07-04
 ### 📊 Get Task Stats
 GET http://localhost:5000/api/stats
 
@@ -166,5 +166,5 @@ PUT http://localhost:5000/api/tasks/{{task_id}}
 Content-Type: application/json
 
 {
-  "reminder_time": "2025-06-28T09:01:00"
+  "reminder_time": "2025-06-29T16:01:00"
 }
