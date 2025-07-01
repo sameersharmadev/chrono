@@ -31,16 +31,23 @@ export default function DashboardPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        Promise.all([
-            fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats/weekly-summary`, { credentials: 'include' }).then((res) => res.json()),
-            fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tasks`, { credentials: 'include' }).then((res) => res.json()),
-            fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tags`, { credentials: 'include' }).then((res) => res.json())
-        ]).then(([summary, tasks, tags]) => {
+        const load = async () => {
+            const userRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, { credentials: 'include' });
+            if (!userRes.ok) return setLoading(false); // not logged in
+
+            const [summary, tasks, tags] = await Promise.all([
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats/weekly-summary`, { credentials: 'include' }).then(res => res.json()),
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tasks`, { credentials: 'include' }).then(res => res.json()),
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tags`, { credentials: 'include' }).then(res => res.json())
+            ]);
+
             setSummary(summary);
             setTasks(tasks);
             setTopTags(tags.slice(0, 5));
             setLoading(false);
-        });
+        };
+
+        load();
     }, []);
 
     const cardBg = 'bg-[#f2f2f5] dark:bg-[#2a2a2a]';

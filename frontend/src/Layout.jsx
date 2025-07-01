@@ -32,6 +32,7 @@ export default function Layout() {
         <main className="p-6 relative">
           {/* Main page routes */}
           <Routes location={backgroundLocation || location}>
+            <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/calendar" element={<Calendar />} />
