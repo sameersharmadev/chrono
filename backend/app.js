@@ -12,8 +12,8 @@ import tagRoutes from './routes/tagRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import statsRoutes from './routes/statsRoutes.js';
 import reminderRoutes from './routes/reminderRoutes.js';
-import authRoutes from './routes/authRoutes.js'; 
-import './config/passport.js'; 
+import authRoutes from './routes/authRoutes.js';
+import './config/passport.js';
 
 dotenv.config();
 
@@ -31,7 +31,10 @@ app.use(session({
   secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true }, 
+  cookie: {
+    sameSite: 'none', 
+    secure: true       
+  }
 }));
 
 app.use(passport.initialize());
@@ -42,8 +45,8 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/subtasks', subtaskRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/calendar', calendarRoutes);
-app.use('/api/stats', statsRoutes); 
-app.use('/api/reminders', reminderRoutes); 
+app.use('/api/stats', statsRoutes);
+app.use('/api/reminders', reminderRoutes);
 app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
