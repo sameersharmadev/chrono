@@ -29,6 +29,36 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [topTags, setTopTags] = useState([]);
     const navigate = useNavigate();
+    useEffect(() => {
+        const load = async () => {
+            const userRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/me`, { credentials: 'include' });
+            if (!userRes.ok) return setLoading(false);
+
+            const [summary, tasks, tags] = await Promise.all([
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats/weekly-summary`, { credentials: 'include' }).then(res => res.json()),
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tasks`, { credentials: 'include' }).then(res => res.json()),
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/api/tags`, { credentials: 'include' }).then(res => res.json())
+            ]);
+
+            // 👇 Override weekly summary for visual variety
+            const now = new Date();
+            const demoSummary = Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(now);
+                d.setDate(now.getDate() - 6 + i);
+                return {
+                    date: d.toISOString(),
+                    percentage: [10, 35, 60, 80, 45, 90, 100][i] // customize as needed
+                };
+            });
+
+            setSummary(demoSummary);
+            setTasks(tasks);
+            setTopTags(tags.slice(0, 5));
+            setLoading(false);
+        };
+
+        load();
+    }, []);
 
     useEffect(() => {
         const load = async () => {

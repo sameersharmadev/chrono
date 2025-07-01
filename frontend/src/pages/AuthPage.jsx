@@ -3,6 +3,8 @@ import { Mail, Lock, LogIn, UserPlus, Loader2, Sun, Moon } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { loginUser, registerUser } from '../api/auth';
 import { useNavigate } from 'react-router';
+import dashboard from '../assets/images/dashboard.png';
+import dashboardLight from '../assets/images/dashboardlight.png';
 
 export default function AuthPage() {
   const [mode, setMode] = useState('login');
@@ -49,7 +51,7 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen flex dark:bg-black">
+    <div className="min-h-screen flex dark:bg-black transition-colors duration-300">
       {/* Left Form Section */}
       <div className="w-full md:w-1/2 flex flex-col items-center justify-center px-8 py-10 bg-white dark:bg-[#121212] relative">
         {/* Theme Toggle */}
@@ -161,11 +163,23 @@ export default function AuthPage() {
       </div>
 
       {/* Right Banner */}
-      <div className="hidden md:flex w-1/2 bg-[#1a1a1a] text-[#ad8cff] items-center justify-center px-10 relative">
-        <div className="text-3xl md:text-4xl font-semibold leading-snug">
-          {/* */}
+      <div
+        className={`hidden md:flex w-1/2 flex-col items-center justify-center px-10 relative transition-colors duration-500 ${darkMode
+            ? 'bg-gradient-to-br from-[#1a1a1a] via-[#2a1a3b] to-[#1a1a1a] text-[#ad8cff]'
+            : 'bg-gradient-to-br from-[#f9f5ff] via-[#e6e0ff] to-[#f9fafb] text-[#5e3ab7]'
+          }`}
+      >
+        <img
+          src={darkMode ? dashboard : dashboardLight}
+          alt="Dashboard Preview"
+          className="w-[90%] mb-8 drop-shadow-xl rounded-lg"
+        />
+        <div className="text-2xl md:text-3xl font-semibold text-center leading-snug max-w-xs">
+          Your all-in-one task management app.
         </div>
       </div>
+
+
     </div>
   );
 }
