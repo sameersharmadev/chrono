@@ -5,6 +5,7 @@ import TaskPopup from './components/TaskPopup';
 import TaskModalWrapper from './components/TaskModalWrapper';
 
 import Dashboard from './pages/Dashboard';
+import AuthSuccess from './pages/AuthSuccess';
 import Tasks from './pages/Tasks';
 import Calendar from './pages/Calendar';
 import Reminders from './pages/Reminders';
@@ -39,6 +40,8 @@ export default function Layout() {
             <Route path="/reminders" element={<Reminders />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/auth-success" element={<AuthSuccess />} />
+
           </Routes>
 
           {/* Modal routes */}
