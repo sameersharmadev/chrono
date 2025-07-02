@@ -27,7 +27,7 @@ export async function register(req, res) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000, 
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   res.status(201).json({ message: 'User registered' });
@@ -45,8 +45,8 @@ export async function login(req, res) {
 
   res.cookie('token', token, {
     httpOnly: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
