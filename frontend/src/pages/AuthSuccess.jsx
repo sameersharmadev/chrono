@@ -13,7 +13,7 @@ export default function AuthSuccess() {
 
       navigate('/dashboard');
     } else {
-      navigate('/login');
+      navigate('/dashboard');
     }
   }, []);
 
