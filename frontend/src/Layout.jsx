@@ -20,9 +20,7 @@ function usePageTitle() {
 
 export default function Layout() {
   const location = useLocation();
-  const state = location.state;
-  const backgroundLocation = state?.backgroundLocation;
-
+  const backgroundLocation = location.state?.backgroundLocation;
   const title = usePageTitle();
 
   return (
@@ -31,9 +29,8 @@ export default function Layout() {
       <div className="flex-1 min-h-screen bg-gray-50 dark:bg-[#1a1a1a] h-screen overflow-auto">
         <Header title={title} />
         <main className="p-6 relative">
-          {/* Main page routes */}
           <Routes location={backgroundLocation || location}>
-            <Route path="/" element={<Dashboard />} />
+            {/* Main authenticated pages */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -41,11 +38,9 @@ export default function Layout() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/auth-success" element={<AuthSuccess />} />
+            <Route path="/" element={<Dashboard />} />
 
-          </Routes>
-
-          {/* Modal routes */}
-          <Routes>
+            {/* Modal routes */}
             <Route path="/task/:id" element={<TaskPopup />} />
             <Route path="/task/new" element={<TaskModalWrapper mode="new" />} />
             <Route path="/task/edit/:id" element={<TaskModalWrapper mode="edit" />} />
