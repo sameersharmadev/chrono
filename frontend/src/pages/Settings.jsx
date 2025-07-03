@@ -93,7 +93,6 @@ export default function SettingsPage() {
             Account
           </div>
           <div className="text-sm mb-2">
-            Logged in as <strong>sameer@sameersharma.me</strong>
           </div>
           <button
             onClick={() => {
