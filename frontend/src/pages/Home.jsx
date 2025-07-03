@@ -213,13 +213,14 @@ You don’t need to do anything extra. Just use the app and the insights build u
                     imageLight={statslight}
                     imageDark={stats}
                 />
-                <Login/>
+                <Login />
 
             </section>
             <footer className="w-full bg-[#9b00bd] py-8">
                 <div className="max-w-7xl mx-auto px-6 text-center">
                     <p className="text-white">
-                        © {new Date().getFullYear()} Chrono. All rights reserved.
+                        © 2025 Chrono. Licensed under the MIT License.
+
                     </p>
                 </div>
             </footer>
