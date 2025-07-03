@@ -87,7 +87,7 @@ export default function HeroSection() {
                 {/* Headline */}
                 <div className="mt-10 mb-20 z-10 text-center">
                     <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-                        Plan smarter. Stay consistent. Build momentum.
+                        Plan smarter with <span style={{ color: '#cb00fb' }}>Chrono</span> 
                     </h1>
                     <p className="text-lg md:text-xl opacity-80 max-w-2xl mx-auto">
                         <span style={{ color: '#cb00fb' }}>Chrono</span> is your all-in-one tool for focused execution,
