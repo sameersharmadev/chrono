@@ -110,7 +110,7 @@ Chrono is designed to run with separate frontend and backend deployments. You ca
 
 ## License
 
-Chrono is open source and available under the [MIT License](LICENSE).
+Chrono is open source and available under the MIT LICENSE.
 
 ---
 
